@@ -1,10 +1,12 @@
 import React from "react"
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom"
 import { createRoot } from "react-dom/client"
-import Pet from "./Pet"
+// import Pet from "./Pet"
 import SearchParams from "./searchParams"
+import Details from "./Details"
 
 const App = () => {
-    // return React.createElement("div", {}, [
+  // return React.createElement("div", {}, [
     //     React.createElement("h1", {}, "Adopt Me!"),
     //     React.createElement(Pet, {
     //         name: "Luna",
@@ -13,12 +15,18 @@ const App = () => {
     //     }),
     // ])
   return (
-    <div>
-      <h1>Adopt Me!</h1>
-      <Pet name="Luna" animal="Cat" breed="British Shorthair" />
-      <Pet name="Stormy" animal="Dog" breed="Labrador" />
-      <SearchParams />
-    </div>
+    <BrowserRouter>
+      <header>
+        <Link to="/">Adopt Me!</Link>
+      </header>
+      <Routes>
+        {/* <Pet name="Luna" animal="Cat" breed="British Shorthair" />
+        <Pet name="Stormy" animal="Dog" breed="Labrador" /> */}
+        {/* <SearchParams /> */}
+        <Route path="/details/:petId" element={<Details />} />
+        <Route path="/" element={<SearchParams />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
