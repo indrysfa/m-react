@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+import fetchSearch from "./useBreedList"
 // import Pet from "./Pet"
 import useBreedList from "./useBreedList"
 import Results from "./Results"
@@ -6,16 +8,21 @@ import Results from "./Results"
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"]
 
 const SearchParams = () => {
-  const [location, setLocation] = useState("")
+  const [requestParams, setRequestParams] = useState({
+    location: "",
+    animal: "",
+    breed: "",
+  })
+  // const [location, setLocation] = useState("")
   const [animal, setAnimal] = useState("")
-  const [breed, setBreed] = useState("")
+  // const [breed, setBreed] = useState("")
   const [pets, setPets] = useState([])
-  const [breeds] = useBreedList(animal)
+  // const [breeds] = useBreedList(animal)
 
-  useEffect(() => {
-    requestPets()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // useEffect(() => {
+  //   requestPets()
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
 
   async function requestPets() {
     const res = await fetch(
@@ -30,20 +37,28 @@ const SearchParams = () => {
     <div className="search-params">
       <form
         onSubmit={(e) => {
+          const formData = new FormData(e.target)
           e.preventDefault()
-          requestPets()
+          // requestPets()
+          const obj = {
+            animal: FormData.get('animal') ?? '',
+            breed: FormData.get('breed') ?? '',
+            location: FormData.get('location') ?? '',
+          }
+          setRequestParams(obj)
         }}
       >
         <label htmlFor="location">
           Location
           <input
             id="location"
+            name="location"
             value={location}
             placeholder="Location"
-            onChange={(e) => {
-              console.log("ini adalah input yang diketik: ", e.target.value)
-              setLocation(e.target.value)
-            }}
+            // onChange={(e) => {
+            //   console.log("ini adalah input yang diketik: ", e.target.value)
+            //   setLocation(e.target.value)
+            // }}
           />
           {/* controlled form */}
         </label>
@@ -51,6 +66,7 @@ const SearchParams = () => {
           Animal
           <select
             id="animal"
+            name="animal"
             value={animal}
             onChange={(e) => {
               setAnimal(e.target.value)
@@ -74,13 +90,14 @@ const SearchParams = () => {
           <select
             disabled={!breeds?.length}
             id="breed"
+            name="breed"
             value={breed}
-            onChange={(e) => {
-              setBreed(e.target.value)
-            }}
-            onBlur={(e) => {
-              setBreed(e.target.value)
-            }}
+            // onChange={(e) => {
+            //   setBreed(e.target.value)
+            // }}
+            // onBlur={(e) => {
+            //   setBreed(e.target.value)
+            // }}
           >
             <option>-- Silahkan Pilih Hewan --</option>
             {breeds.map((breed) => (
